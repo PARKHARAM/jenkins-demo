@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>박하람 · 이력서</title>
+<style>
+  :root { --ink:#1d2433; --muted:#5b6475; --line:#e3e7ee; --accent:#2457d6; --bg:#f6f8fb; --card:#fff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif; }
+  main { max-width:880px; margin:40px auto; padding:0 16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:32px 36px; margin-bottom:20px; }
+  header h1 { margin:0; font-size:2rem; letter-spacing:-.02em; }
+  header .role { color:var(--accent); font-weight:600; margin:4px 0 12px; }
+  header .contact { color:var(--muted); font-size:.95rem; display:flex; gap:18px; flex-wrap:wrap; }
+  h2 { font-size:1.1rem; margin:0 0 14px; padding-bottom:8px; border-bottom:2px solid var(--ink); }
+  .item { display:grid; grid-template-columns:150px 1fr; gap:4px 20px; margin-bottom:16px; }
+  .item .when { color:var(--muted); font-size:.92rem; }
+  .item h3 { margin:0; font-size:1rem; }
+  .item ul { margin:6px 0 0; padding-left:18px; }
+  .tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .tags span { background:#eef2fb; color:#23408f; border-radius:999px; padding:3px 12px; font-size:.88rem; }
+  .skill { display:grid; grid-template-columns:150px 1fr; gap:6px 20px; margin-bottom:10px; }
+  .skill b { font-weight:600; }
+  footer { color:var(--muted); font-size:.85rem; text-align:center; margin:24px 0 40px; }
+  footer code { background:#e9edf4; padding:2px 6px; border-radius:6px; }
+  .sample { background:#fff6e0; border:1px solid #f0d9a0; color:#7a5a00; border-radius:8px; padding:8px 12px; font-size:.88rem; margin-bottom:20px; }
+  @media (max-width:640px){ .item,.skill{ grid-template-columns:1fr; } .card{ padding:24px 20px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="sample">샘플 이력서입니다. 경력·학력 항목은 예시이며 실제 내용으로 교체 예정입니다.</div>
+
+  <header class="card">
+    <h1>박하람</h1>
+    <div class="role">Cloud / DevOps Engineer</div>
+    <div class="contact">
+      <span>GitHub: <a href="https://github.com/PARKHARAM">github.com/PARKHARAM</a></span>
+      <span>Email: hello@example.com</span>
+      <span>Seoul, Korea</span>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2>소개</h2>
+    <p>GCP 위에서 Terraform으로 인프라를 코드화하고, GKE 기반 플랫폼(ArgoCD, Vault, Keycloak, Jenkins)을 운영하는 엔지니어입니다.
+       장애 상황에서 환경을 처음부터 재구축한 경험이 있으며, 키 파일 없는 배포(Workload Identity)와 인증서 자동화처럼
+       운영 부담을 줄이는 구조를 선호합니다.</p>
+  </section>
+
+  <section class="card">
+    <h2>경력 (예시)</h2>
+    <div class="item">
+      <div class="when">2024.03 – 현재</div>
+      <div>
+        <h3>클라우드 플랫폼 엔지니어 · 예시회사</h3>
+        <ul>
+          <li>GCP 프로젝트/네트워크/GKE를 Terraform 레이어 구조로 표준화</li>
+          <li>Jenkins·GitHub Actions 기반 CI/CD와 ArgoCD GitOps 배포 운영</li>
+          <li>Vault + VSO로 TLS 인증서와 시크릿 배포 자동화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="item">
+      <div class="when">2022.07 – 2024.02</div>
+      <div>
+        <h3>인프라 엔지니어 · 예시회사</h3>
+        <ul>
+          <li>VM 기반 서비스의 컨테이너 전환 및 Kubernetes 이관</li>
+          <li>Prometheus/Grafana 모니터링 구성</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>프로젝트</h2>
+    <div class="item">
+      <div class="when">2026.10</div>
+      <div>
+        <h3>GCP 환경 재구축 (vm-3 → vm-4)</h3>
+        <ul>
+          <li>결제 계정 종료로 접근 불가해진 환경을 Terraform 코드만으로 새 프로젝트에 재구축</li>
+          <li>GKE, Cloud SQL, Firebase, DNS, ArgoCD, Vault, Keycloak, Jenkins 복구</li>
+        </ul>
+      </div>
+    </div>
+    <div class="item">
+      <div class="when">2026.10</div>
+      <div>
+        <h3>Jenkins CI/CD 이력서 페이지 (이 페이지)</h3>
+        <ul>
+          <li>GitHub push → Jenkins 파드 에이전트 → Maven 빌드·테스트 → Kaniko 이미지 → Artifact Registry → GKE 배포</li>
+          <li>Docker 데몬·서비스 계정 키 없이 Workload Identity로 레지스트리 push</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>기술</h2>
+    <div class="skill"><b>Cloud</b><div class="tags"><span>GCP</span><span>GKE</span><span>Cloud SQL</span><span>Cloud DNS</span><span>Artifact Registry</span></div></div>
+    <div class="skill"><b>IaC</b><div class="tags"><span>Terraform</span><span>Helm</span></div></div>
+    <div class="skill"><b>CI/CD</b><div class="tags"><span>Jenkins</span><span>GitHub Actions</span><span>ArgoCD</span><span>Argo Rollouts</span><span>Kaniko</span></div></div>
+    <div class="skill"><b>Security</b><div class="tags"><span>Vault</span><span>Keycloak</span><span>cert-manager</span><span>Workload Identity</span></div></div>
+    <div class="skill"><b>Language</b><div class="tags"><span>Java / Spring Boot</span><span>Python</span><span>Bash</span></div></div>
+  </section>
+
+  <section class="card">
+    <h2>학력 · 자격 (예시)</h2>
+    <div class="item"><div class="when">2022.02</div><div><h3>예시대학교 컴퓨터공학과 졸업</h3></div></div>
+    <div class="item"><div class="when">2025</div><div><h3>Google Cloud Associate Cloud Engineer (예시)</h3></div></div>
+  </section>
+
+  <footer>Jenkins로 자동 배포됨 · Build <code>{{BUILD_INFO}}</code> · <a href="/actuator/health">health</a></footer>
+</main>
+</body>
+</html>
