@@ -20,6 +20,6 @@ class DemoApplicationTests {
     void resumePageRendersWithBuildInfo() {
         String html = app.home();
         assertThat(html).contains("<title>박하람 · 이력서</title>");
-        assertThat(html).doesNotContain("{{BUILD_INFO}}");
+        assertThat(html).doesNotContain("{{");   // 치환 안 된 플레이스홀더가 없어야 함
     }
 }

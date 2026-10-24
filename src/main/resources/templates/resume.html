@@ -24,12 +24,14 @@
   .skill b { font-weight:600; }
   footer { color:var(--muted); font-size:.85rem; text-align:center; margin:24px 0 40px; }
   footer code { background:#e9edf4; padding:2px 6px; border-radius:6px; }
+  .env-dev { background:#e8f0ff; border:1px solid #9db8f2; color:#1d3f9a; border-radius:8px; padding:8px 12px; font-size:.88rem; margin-bottom:12px; font-weight:600; }
   .sample { background:#fff6e0; border:1px solid #f0d9a0; color:#7a5a00; border-radius:8px; padding:8px 12px; font-size:.88rem; margin-bottom:20px; }
   @media (max-width:640px){ .item,.skill{ grid-template-columns:1fr; } .card{ padding:24px 20px; } }
 </style>
 </head>
 <body>
 <main>
+  {{ENV_BANNER}}
   <div class="sample">샘플 이력서입니다. 경력·학력 항목은 예시이며 실제 내용으로 교체 예정입니다.</div>
 
   <header class="card">
@@ -113,7 +115,7 @@
     <div class="item"><div class="when">2025</div><div><h3>Google Cloud Associate Cloud Engineer (예시)</h3></div></div>
   </section>
 
-  <footer>Jenkins로 자동 배포됨 · Build <code>{{BUILD_INFO}}</code> · <a href="/actuator/health">health</a></footer>
+  <footer>Jenkins로 자동 배포됨 · {{APP_ENV}} · Build <code>{{BUILD_INFO}}</code> · <a href="/actuator/health">health</a></footer>
 </main>
 </body>
 </html>
