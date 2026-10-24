@@ -1,0 +1,63 @@
+# Jenkinsfile 이 ${IMAGE} / ${BUILD_INFO} 를 sed 로 치환해서 apply 한다
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-demo
+  namespace: demo
+  labels: { app: jenkins-demo }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: jenkins-demo }
+  template:
+    metadata:
+      labels: { app: jenkins-demo }
+    spec:
+      containers:
+      - name: app
+        image: ${IMAGE}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: BUILD_INFO
+          value: "${BUILD_INFO}"
+        readinessProbe:
+          httpGet: { path: /actuator/health, port: 8080 }
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        resources:
+          requests: { cpu: 100m, memory: 256Mi }
+          limits:   { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-demo
+  namespace: demo
+spec:
+  selector: { app: jenkins-demo }
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jenkins-demo
+  namespace: demo
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts: [demo.hrc0618.shop]
+    secretName: hrc0618-tls          # VSO 가 Vault 의 와일드카드 인증서를 demo 네임스페이스에 동기화
+  rules:
+  - host: demo.hrc0618.shop
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jenkins-demo
+            port: { number: 80 }
