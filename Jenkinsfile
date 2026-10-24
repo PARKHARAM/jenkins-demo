@@ -1,13 +1,20 @@
 #!groovy
 // jenkins-demo: 이력서 페이지 CI/CD (개발계 / 운영계)
 //
-//   브랜치     빌드·테스트  이미지                 배포
-//   PR, 기타   O           X                      X
-//   develop    O           빌드 (이미 있으면 생략)  개발계 demo-dev → https://dev.hrc0618.shop  (자동)
-//   main       O           재사용 (없으면 빌드)     운영계 demo     → https://demo.hrc0618.shop (승인 후)
+//   브랜치     빌드·테스트  이미지 빌드 + Trivy 스캔        push   배포
+//   PR         O           O (게이트만, push 안 함)        X      X
+//   develop    O           O (이미 있으면 생략)             O      개발계 demo-dev → https://dev.hrc0618.shop  (자동)
+//   main       O           재사용 (없으면 빌드·스캔)        O      운영계 demo     → https://demo.hrc0618.shop (승인 후)
+//   그 외      O           X                               X      X
 //
-// 이미지 태그 = 커밋 SHA 7자리. develop 을 main 으로 fast-forward 하면 같은 커밋이므로
-// 개발계에서 검증한 이미지를 다시 빌드하지 않고 그대로 운영계에 올린다 (build once, deploy many).
+// 흐름: develop push → 개발계 → PR(develop → main, CI 통과 필수: GitHub 브랜치 보호) → 머지 → 승인 → 운영계
+//
+// 이미지 태그 = 소스 트리 해시(git rev-parse HEAD^{tree}) 12자리. 커밋이 아니라 "내용" 기준이라
+// PR 을 merge commit/squash 로 머지해 커밋 SHA 가 바뀌어도 내용이 같으면 같은 태그 → 개발계에서 빌드·스캔·검증한
+// 이미지를 다시 빌드하지 않고 그대로 운영계에 올린다 (build once, deploy many).
+//
+// 보안 게이트: Kaniko 로 이미지를 tar 로만 만든 뒤 Trivy 로 스캔하고, 수정 버전이 있는 HIGH/CRITICAL 취약점이
+// 하나라도 있으면 실패 → 레지스트리에 올라가지 않는다. 위험 수용이 필요하면 저장소 루트 .trivyignore 에 CVE 와 사유를 적는다.
 //
 // 전제 (iac-gcp-only pjt-an3-dev-vm-4 에 반영됨)
 //  - Jenkins 파드 에이전트 KSA jenkins/default ↔ GSA jenkins-sa (Workload Identity, roles/artifactregistry.writer)
@@ -47,7 +54,20 @@ spec:
     resources:
       requests: { cpu: 500m, memory: 1Gi }
       limits:   { cpu: "2",  memory: 2Gi }
-  - name: gcrane            # 레지스트리에 같은 태그가 이미 있는지 확인 (WI 로 인증)
+  - name: trivy             # 이미지 취약점 스캔 (보안 게이트). 버전은 trivy-db-update CronJob 과 맞춤
+    image: aquasec/trivy:0.58.1
+    command: ["sleep"]
+    args: ["infinity"]
+    resources:
+      requests: { cpu: 200m, memory: 512Mi }
+      limits:   { cpu: "1",  memory: 1Gi }
+    volumeMounts:
+    - name: trivy-db
+      mountPath: /trivy-cache
+      readOnly: true
+    - name: trivy-work        # 공유 DB 를 복사해 쓰는 작업 공간 (Trivy 는 스캔만 해도 DB 파일을 쓰기 모드로 연다)
+      mountPath: /tmp/trivy-cache
+  - name: gcrane            # 같은 태그 존재 확인 + 스캔 통과한 tar 를 push (WI 로 인증)
     image: gcr.io/go-containerregistry/gcrane:debug@sha256:af38137800c3f26df6a80abde9176f88739b81e3e0dc4d80ed5f38be9d3b39dd
     command: ["sleep"]
     args: ["infinity"]
@@ -57,6 +77,12 @@ spec:
     args: ["infinity"]
   volumes:
   - name: m2
+    emptyDir: {}
+  - name: trivy-db          # 취약점 DB 공유 캐시 (jenkins/trivy-db, CronJob trivy-db-update 가 6시간마다 갱신)
+    persistentVolumeClaim:
+      claimName: trivy-db
+      readOnly: true
+  - name: trivy-work
     emptyDir: {}
 '''
 
@@ -127,7 +153,11 @@ pipeline {
               // checkout 은 jnlp(uid 1000), 이후 단계는 root 컨테이너라 git 을 다시 부르면 "dubious ownership"
               // -> checkout 이 돌려준 커밋 값 사용
               env.GIT_SHA = scmVars.GIT_COMMIT.take(7)
-              env.IMAGE   = "${REGISTRY}/${APP}:${env.GIT_SHA}"
+              // 워크스페이스 소유자(jnlp, uid 1000)로 git 실행
+              container('jnlp') {
+                env.TREE_SHA = sh(script: 'git rev-parse HEAD^{tree}', returnStdout: true).trim().take(12)
+              }
+              env.IMAGE   = "${REGISTRY}/${APP}:${env.TREE_SHA}"
               def t = TARGETS[env.BRANCH_NAME]
               echo "branch=${env.BRANCH_NAME} image=${env.IMAGE} target=${t ? t.env + ' (' + t.host + ')' : '없음 (빌드·테스트만)'}"
             }
@@ -144,30 +174,57 @@ pipeline {
           }
         }
 
-        stage('Image (Kaniko -> Artifact Registry)') {
-          when { anyOf { branch 'develop'; branch 'main' } }
+        stage('Image (Kaniko → Trivy → Artifact Registry)') {
+          when { anyOf { branch 'develop'; branch 'main'; changeRequest() } }
           steps {
             script {
+              def publish = ['develop', 'main'].contains(env.BRANCH_NAME)
               def exists = false
-              container('gcrane') {
-                exists = sh(script: "gcrane digest ${env.IMAGE}", returnStatus: true) == 0
+              if (publish) {
+                container('gcrane') {
+                  exists = sh(script: "gcrane digest ${env.IMAGE}", returnStatus: true) == 0
+                }
               }
               if (exists) {
-                echo "이미지 재사용: ${env.IMAGE} (같은 커밋을 이미 빌드했음 — 개발계에서 검증된 이미지)"
-              } else {
-                container('kaniko') {
-                  // WI 로 인증: Kaniko 가 GKE 메타데이터 서버에서 jenkins-sa 토큰을 받아 *.pkg.dev 에 push
-                  sh """
-                    /kaniko/executor \\
-                      --context=dir://\$WORKSPACE \\
-                      --dockerfile=\$WORKSPACE/Dockerfile \\
-                      --destination=${env.IMAGE} \\
-                      --cache=true --cache-repo=${REGISTRY}/kaniko-cache \\
-                      --snapshot-mode=redo
-                  """
+                echo "이미지 재사용: ${env.IMAGE} (같은 소스 트리로 이미 빌드·스캔·검증된 이미지)"
+                return
+              }
+              container('kaniko') {
+                // push 하지 않고 tar 로만 만든다 (스캔 통과 후에만 레지스트리에 올리기 위해)
+                sh """
+                  /kaniko/executor \\
+                    --context=dir://\$WORKSPACE \\
+                    --dockerfile=\$WORKSPACE/Dockerfile \\
+                    --destination=${env.IMAGE} \\
+                    --no-push --tar-path=\$WORKSPACE/image.tar \\
+                    --cache=true --cache-repo=${REGISTRY}/kaniko-cache \\
+                    --snapshot-mode=redo
+                """
+              }
+              container('trivy') {
+                // DB 는 내려받지 않고 공유 캐시(읽기 전용 PVC)를 노드 로컬 emptyDir 로 복사해 쓴다.
+                // (Trivy 는 DB 를 쓰기 모드로 열어 읽기 전용 마운트를 직접 못 씀. 빌드마다 복사본이라 동시 빌드도 충돌 없음)
+                def TRIVY = "trivy image --input \$WORKSPACE/image.tar --cache-dir /tmp/trivy-cache --cache-backend memory " +
+                            "--skip-db-update --skip-java-db-update --no-progress --severity HIGH,CRITICAL --ignore-unfixed"
+                sh """
+                  start=\$(date +%s); cp -a /trivy-cache/db /trivy-cache/java-db /tmp/trivy-cache/
+                  echo "취약점 DB 복사 \$((\$(date +%s)-start))초: \$(cat /tmp/trivy-cache/db/metadata.json)"
+                  ${TRIVY} --format table --exit-code 0 > trivy-report.txt
+                  cat trivy-report.txt
+                  # 게이트: 수정 버전이 있는 HIGH/CRITICAL 이 있으면 실패
+                  ${TRIVY} --format table --exit-code 1 > /dev/null
+                  echo "Trivy 게이트 통과: 수정 가능한 HIGH/CRITICAL 취약점 없음"
+                """
+              }
+              if (publish) {
+                container('gcrane') {
+                  sh "gcrane push \$WORKSPACE/image.tar ${env.IMAGE}"
                 }
               }
             }
+          }
+          post {
+            always { archiveArtifacts artifacts: 'trivy-report.txt', allowEmptyArchive: true }
           }
         }
 
