@@ -69,15 +69,18 @@
   .tags span { background:var(--accent-soft); color:#24448f; border:1px solid #dbe6fb; border-radius:999px; padding:3px 11px; font-size:.86rem; }
   .tags.sm { gap:6px; }
   .tags.sm span { font-size:.76rem; padding:1px 9px; }
-  .credentials { display:grid; grid-template-columns:1fr 1fr; gap:12px 26px; }
-  .credential { padding:12px 0; border-bottom:1px solid var(--line); }
-  .credential strong { display:block; font-size:.94rem; }
-  .credential span { color:var(--muted); font-size:.86rem; }
+  .table-wrap { overflow-x:auto; }
+  .credentials { width:100%; border-collapse:collapse; font-size:.92rem; }
+  .credentials th, .credentials td { padding:10px 12px; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap; }
+  .credentials th { color:var(--muted); font-weight:600; font-size:.82rem; letter-spacing:.02em; }
+  .credentials td:first-child { font-weight:600; }
+  .company-brief { margin:-8px 0 14px; color:var(--muted); font-size:.86rem; }
+  .note { color:var(--muted); font-weight:500; font-size:.82rem; }
   .military { display:grid; grid-template-columns:155px 1fr; gap:20px; align-items:center; padding:8px 0; }
   .env-dev { background:#e8f0ff; border:1px solid #9db8f2; color:#1d3f9a; border-radius:10px; padding:9px 14px; font-size:.88rem; margin-bottom:14px; font-weight:650; }
   footer { color:var(--muted); font-size:.83rem; text-align:center; margin:26px 0 44px; }
   footer code { background:#e7ecf3; padding:2px 6px; border-radius:6px; }
-  @media (max-width:680px) { main { margin:20px auto; padding:0 12px; } .card,.hero { padding:26px 22px; border-radius:14px; } header h1 { font-size:2.1rem; } .metrics,.project-grid { grid-template-columns:1fr; } .item,.skill,.military { grid-template-columns:1fr; gap:3px; } .career-row { grid-template-columns:1fr; gap:2px; } .career-row .position { text-align:left; } .credentials { grid-template-columns:1fr; } .project-head,.group-title { flex-direction:column; gap:0; } }
+  @media (max-width:680px) { main { margin:20px auto; padding:0 12px; } .card,.hero { padding:26px 22px; border-radius:14px; } header h1 { font-size:2.1rem; } .metrics,.project-grid { grid-template-columns:1fr; } .item,.skill,.military { grid-template-columns:1fr; gap:3px; } .career-row { grid-template-columns:1fr; gap:2px; } .career-row .position { text-align:left; } .project-head,.group-title { flex-direction:column; gap:0; } }
   @media print { body { background:#fff; font-size:13px; } main { max-width:none; margin:0; padding:0; } .card { box-shadow:none; break-inside:avoid; padding:24px 28px; } .env-dev,.no-print,footer { display:none; } }
 </style>
 </head>
@@ -135,7 +138,7 @@
       </div>
       <div class="career-row">
         <div class="period">2021.09 – 2024.09</div>
-        <div><strong class="company">종이와연필</strong></div>
+        <div><strong class="company">종이와연필</strong> <span class="note">LG CNS Singlex 프로젝트 파견</span></div>
         <div class="team">클라우드팀 · 클라우드 TA</div>
         <div class="position">사원</div>
       </div>
@@ -146,6 +149,7 @@
     <div class="section-kicker">Project Experience</div>
     <h2>프로젝트 경력</h2>
     <div class="group-title"><h3>아이티센클로잇</h3><span>2024.09 – 현재</span></div>
+    <p class="company-brief">아이티센 그룹의 클라우드 전문 계열사 · IT 중견기업 · 매출액 2,227억 · 임직원 434명</p>
     <div class="project-grid">
       <div class="project">
         <div class="project-head"><strong>사내 시스템 클라우드 마이그레이션</strong><span class="period">2024.09 – 2024.12</span></div>
@@ -198,7 +202,8 @@
       </div>
     </div>
 
-    <div class="group-title"><h3>종이와연필 · LG CNS Singlex</h3><span>2021.09 – 2024.09</span></div>
+    <div class="group-title"><h3>종이와연필 <span class="note">LG CNS Singlex 프로젝트 파견 근무</span></h3><span>2021.09 – 2024.09</span></div>
+    <p class="company-brief">LG CNS · LG U+ 협력사(LG 2차 협력사) 중소기업 · 매출액 12억 · 임직원 23명 · 2021.09 – 2024.09 LG CNS Singlex 프로젝트에 파견되어 근무</p>
     <div class="project-grid">
       <div class="project">
         <div class="project-head"><strong>상품기획 시스템 구축</strong><span class="period">2021.09 – 2021.12</span></div>
@@ -273,12 +278,17 @@
   <section class="card" id="certifications">
     <div class="section-kicker">Certifications</div>
     <h2>자격</h2>
-    <div class="credentials">
-      <div class="credential"><strong>AI Developer Professional</strong><span>AWS · 2026.09</span></div>
-      <div class="credential"><strong>Professional Cloud DevOps Engineer</strong><span>Google Cloud · 2025.12</span></div>
-      <div class="credential"><strong>Professional Cloud Architect</strong><span>Google Cloud · 2025.08</span></div>
-      <div class="credential"><strong>Certified Kubernetes Administrator</strong><span>Linux Foundation · 2024.01</span></div>
-      <div class="credential"><strong>중등학교 정교사 2급 · 컴퓨터</strong><span>2022.02</span></div>
+    <div class="table-wrap">
+      <table class="credentials">
+        <thead><tr><th>자격증명</th><th>발급처</th><th>취득일</th></tr></thead>
+        <tbody>
+          <tr><td>AI Developer Professional</td><td>AWS</td><td>2026.09</td></tr>
+          <tr><td>Professional Cloud DevOps Engineer</td><td>Google Cloud</td><td>2025.12</td></tr>
+          <tr><td>Professional Cloud Architect</td><td>Google Cloud</td><td>2025.08</td></tr>
+          <tr><td>Certified Kubernetes Administrator</td><td>Linux Foundation</td><td>2024.01</td></tr>
+          <tr><td>중등학교 정교사 2급 (컴퓨터)</td><td>교육부</td><td>2022.02</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
