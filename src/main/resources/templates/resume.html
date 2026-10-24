@@ -3,119 +3,295 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>박하람 · 이력서</title>
+<meta name="description" content="클라우드 인프라와 DevOps 자동화를 설계하고 운영하는 박하람의 이력서">
+<title>박하람 · Cloud &amp; DevOps Engineer</title>
 <style>
-  :root { --ink:#1d2433; --muted:#5b6475; --line:#e3e7ee; --accent:#2457d6; --bg:#f6f8fb; --card:#fff; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif; }
-  main { max-width:880px; margin:40px auto; padding:0 16px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:32px 36px; margin-bottom:20px; }
-  header h1 { margin:0; font-size:2rem; letter-spacing:-.02em; }
-  header .role { color:var(--accent); font-weight:600; margin:4px 0 12px; }
-  header .contact { color:var(--muted); font-size:.95rem; display:flex; gap:18px; flex-wrap:wrap; }
-  h2 { font-size:1.1rem; margin:0 0 14px; padding-bottom:8px; border-bottom:2px solid var(--ink); }
-  .item { display:grid; grid-template-columns:150px 1fr; gap:4px 20px; margin-bottom:16px; }
-  .item .when { color:var(--muted); font-size:.92rem; }
-  .item h3 { margin:0; font-size:1rem; }
-  .item ul { margin:6px 0 0; padding-left:18px; }
+  :root { --ink:#172033; --muted:#657086; --line:#dfe5ee; --accent:#2457d6; --accent-soft:#edf3ff; --bg:#f4f7fb; --card:#fff; --ok:#1f8a5b; --ok-soft:#e9f7f0; --warn-soft:#fff6e8; --warn-line:#f0c88f; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.7 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif; word-break:keep-all; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9em; }
+  main { max-width:960px; margin:44px auto; padding:0 20px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:34px 38px; margin-bottom:20px; box-shadow:0 12px 34px rgba(32,49,78,.055); }
+  .hero { position:relative; overflow:hidden; padding:46px 44px; }
+  .hero::after { content:""; position:absolute; width:260px; height:260px; right:-110px; top:-130px; border-radius:50%; background:linear-gradient(135deg,#dce8ff,#f0f5ff); }
+  .eyebrow { color:var(--accent); font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+  header h1 { margin:6px 0 0; font-size:2.55rem; line-height:1.25; letter-spacing:-.045em; }
+  header .role { color:#35415a; font-size:1.12rem; font-weight:650; margin:6px 0 19px; }
+  header .contact { color:var(--muted); font-size:.93rem; display:flex; gap:8px 22px; flex-wrap:wrap; }
+  .primary-nav { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+  .primary-nav a { padding:12px 16px; background:#fff; border:1px solid var(--line); border-radius:12px; color:#455168; text-align:center; font-size:.92rem; font-weight:750; }
+  .primary-nav a:hover { border-color:#aac0ef; color:var(--accent); text-decoration:none; }
+  .primary-nav a.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .section-nav { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 20px; padding:0; list-style:none; }
+  .section-nav a { display:block; padding:7px 13px; background:#fff; border:1px solid var(--line); border-radius:999px; color:#455168; font-size:.84rem; font-weight:650; }
+  .section-nav a:hover { border-color:#aac0ef; color:var(--accent); text-decoration:none; }
+  .section-kicker { color:var(--accent); font-size:.76rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:3px; }
+  .summary { margin:0; font-size:1.04rem; color:#35415a; }
+  .metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:25px; }
+  .metric { background:var(--accent-soft); border-radius:12px; padding:14px 16px; }
+  .metric strong { display:block; color:var(--accent); font-size:1.15rem; }
+  .metric span { color:var(--muted); font-size:.84rem; }
+  h2 { font-size:1.2rem; margin:0 0 20px; padding-bottom:10px; border-bottom:2px solid var(--ink); letter-spacing:-.02em; }
+  h3 { margin:0; font-size:1.04rem; }
+  .label { color:var(--muted); font-size:.8rem; font-weight:700; letter-spacing:.06em; margin:14px 0 2px; }
+  .item { display:grid; grid-template-columns:155px 1fr; gap:6px 24px; padding:3px 0 23px; margin-bottom:20px; border-bottom:1px solid var(--line); }
+  .item:last-child { border:0; padding-bottom:0; margin-bottom:0; }
+  .when { color:var(--muted); font-size:.91rem; }
+  .company { color:var(--accent); font-weight:700; }
+  .subtitle { color:var(--muted); font-size:.92rem; margin:2px 0 0; }
+  .item ul { margin:4px 0 0; padding-left:20px; }
+  .item li + li { margin-top:5px; }
+  .career-list { border-top:1px solid var(--line); }
+  .career-row { display:grid; grid-template-columns:145px 1.25fr 1fr 90px; gap:16px; align-items:center; padding:17px 0; border-bottom:1px solid var(--line); }
+  .career-row > div { min-width:0; }
+  .career-row .period { color:var(--muted); font-size:.88rem; }
+  .career-row .team { color:var(--muted); font-size:.9rem; }
+  .career-row .position { text-align:right; font-size:.9rem; font-weight:700; }
+  .group-title { display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin:4px 0 14px; }
+  .group-title span { color:var(--muted); font-size:.88rem; }
+  .project-grid { display:grid; grid-template-columns:1fr; gap:12px; }
+  .project-grid .project { margin:0; }
+  .project-grid + .group-title { margin-top:30px; padding-top:25px; border-top:1px solid var(--line); }
+  .project { margin-top:12px; padding:16px 18px; background:#f8faff; border-left:3px solid #aec4f5; border-radius:4px 10px 10px 4px; }
+  .project-head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .project-head strong { font-size:.95rem; }
+  .project-head .period { color:var(--muted); font-size:.82rem; white-space:nowrap; }
+  .project p { margin:4px 0 0; color:#455168; font-size:.93rem; }
+  .project ul { margin:9px 0 0; padding-left:19px; color:#455168; font-size:.93rem; }
+  .project li + li { margin-top:4px; }
+  .project .tags { margin-top:10px; }
+  .skill { display:grid; grid-template-columns:155px 1fr; gap:8px 20px; margin-bottom:14px; }
+  .skill b { font-weight:700; }
   .tags { display:flex; flex-wrap:wrap; gap:8px; }
-  .tags span { background:#eef2fb; color:#23408f; border-radius:999px; padding:3px 12px; font-size:.88rem; }
-  .skill { display:grid; grid-template-columns:150px 1fr; gap:6px 20px; margin-bottom:10px; }
-  .skill b { font-weight:600; }
-  footer { color:var(--muted); font-size:.85rem; text-align:center; margin:24px 0 40px; }
-  footer code { background:#e9edf4; padding:2px 6px; border-radius:6px; }
-  .env-dev { background:#e8f0ff; border:1px solid #9db8f2; color:#1d3f9a; border-radius:8px; padding:8px 12px; font-size:.88rem; margin-bottom:12px; font-weight:600; }
-  .sample { background:#fff6e0; border:1px solid #f0d9a0; color:#7a5a00; border-radius:8px; padding:8px 12px; font-size:.88rem; margin-bottom:20px; }
-  @media (max-width:640px){ .item,.skill{ grid-template-columns:1fr; } .card{ padding:24px 20px; } }
+  .tags span { background:var(--accent-soft); color:#24448f; border:1px solid #dbe6fb; border-radius:999px; padding:3px 11px; font-size:.86rem; }
+  .tags.sm { gap:6px; }
+  .tags.sm span { font-size:.76rem; padding:1px 9px; }
+  .credentials { display:grid; grid-template-columns:1fr 1fr; gap:12px 26px; }
+  .credential { padding:12px 0; border-bottom:1px solid var(--line); }
+  .credential strong { display:block; font-size:.94rem; }
+  .credential span { color:var(--muted); font-size:.86rem; }
+  .military { display:grid; grid-template-columns:155px 1fr; gap:20px; align-items:center; padding:8px 0; }
+  .env-dev { background:#e8f0ff; border:1px solid #9db8f2; color:#1d3f9a; border-radius:10px; padding:9px 14px; font-size:.88rem; margin-bottom:14px; font-weight:650; }
+  footer { color:var(--muted); font-size:.83rem; text-align:center; margin:26px 0 44px; }
+  footer code { background:#e7ecf3; padding:2px 6px; border-radius:6px; }
+  @media (max-width:680px) { main { margin:20px auto; padding:0 12px; } .card,.hero { padding:26px 22px; border-radius:14px; } header h1 { font-size:2.1rem; } .metrics,.project-grid { grid-template-columns:1fr; } .item,.skill,.military { grid-template-columns:1fr; gap:3px; } .career-row { grid-template-columns:1fr; gap:2px; } .career-row .position { text-align:left; } .credentials { grid-template-columns:1fr; } .project-head,.group-title { flex-direction:column; gap:0; } }
+  @media print { body { background:#fff; font-size:13px; } main { max-width:none; margin:0; padding:0; } .card { box-shadow:none; break-inside:avoid; padding:24px 28px; } .env-dev,.no-print,footer { display:none; } }
 </style>
 </head>
 <body>
 <main>
   {{ENV_BANNER}}
-  <div class="sample">샘플 이력서입니다. 경력·학력 항목은 예시이며 실제 내용으로 교체 예정입니다.</div>
-
-  <header class="card">
+  <nav class="primary-nav" aria-label="주요 페이지">
+    <a class="active" href="/" aria-current="page">이력서</a>
+    <a href="/cover-letter">자기소개서</a>
+    <a href="/cicd">CI/CD 구성</a>
+  </nav>
+  <header class="card hero">
+    <div class="eyebrow">Cloud · DevOps · Platform</div>
     <h1>박하람</h1>
     <div class="role">Cloud / DevOps Engineer</div>
     <div class="contact">
-      <span>GitHub: <a href="https://github.com/PARKHARAM">github.com/PARKHARAM</a></span>
-      <span>Email: hello@example.com</span>
-      <span>Seoul, Korea</span>
+      <span>서울, 대한민국</span>
+      <span><a href="mailto:gkfka133@naver.com">gkfka133@naver.com</a></span>
+      <span><a href="https://github.com/PARKHARAM" target="_blank" rel="noopener">github.com/PARKHARAM</a></span>
     </div>
   </header>
 
-  <section class="card">
-    <h2>소개</h2>
-    <p>GCP 위에서 Terraform으로 인프라를 코드화하고, GKE 기반 플랫폼(ArgoCD, Vault, Keycloak, Jenkins)을 운영하는 엔지니어입니다.
-       장애 상황에서 환경을 처음부터 재구축한 경험이 있으며, 키 파일 없는 배포(Workload Identity)와 인증서 자동화처럼
-       운영 부담을 줄이는 구조를 선호합니다.</p>
-  </section>
+  <nav aria-label="페이지 목차">
+    <ul class="section-nav">
+      <li><a href="#competencies">핵심 역량</a></li>
+      <li><a href="#career">경력 요약</a></li>
+      <li><a href="#projects">프로젝트 경력</a></li>
+      <li><a href="#skills">기술</a></li>
+      <li><a href="#education">학력</a></li>
+      <li><a href="#certifications">자격</a></li>
+      <li><a href="#military">병역</a></li>
+    </ul>
+  </nav>
 
-  <section class="card">
-    <h2>경력 (예시)</h2>
-    <div class="item">
-      <div class="when">2024.03 – 현재</div>
-      <div>
-        <h3>클라우드 플랫폼 엔지니어 · 예시회사</h3>
-        <ul>
-          <li>GCP 프로젝트/네트워크/GKE를 Terraform 레이어 구조로 표준화</li>
-          <li>Jenkins·GitHub Actions 기반 CI/CD와 ArgoCD GitOps 배포 운영</li>
-          <li>Vault + VSO로 TLS 인증서와 시크릿 배포 자동화</li>
-        </ul>
-      </div>
-    </div>
-    <div class="item">
-      <div class="when">2022.07 – 2024.02</div>
-      <div>
-        <h3>인프라 엔지니어 · 예시회사</h3>
-        <ul>
-          <li>VM 기반 서비스의 컨테이너 전환 및 Kubernetes 이관</li>
-          <li>Prometheus/Grafana 모니터링 구성</li>
-        </ul>
-      </div>
+  <section class="card" id="competencies">
+    <div class="section-kicker">Resume</div>
+    <h2>핵심 역량</h2>
+    <p class="summary">5년간 GCP와 AWS 기반 클라우드 인프라를 설계·구축·운영하며 Kubernetes, CI/CD, IaC와 자동화를 함께 경험했습니다. 안정적인 운영에 그치지 않고 반복 업무를 자동화하고 개발과 운영 프로세스를 효율적으로 개선하는 방향으로 업무 범위를 확장해 왔습니다.</p>
+    <div class="metrics">
+      <div class="metric"><strong>Multi Cloud</strong><span>GCP · AWS 기반 인프라 설계와 운영</span></div>
+      <div class="metric"><strong>Kubernetes</strong><span>GKE · EKS · Helm 기반 환경 구축</span></div>
+      <div class="metric"><strong>DevOps</strong><span>Jenkins · Argo CD · Terraform 자동화</span></div>
     </div>
   </section>
 
-  <section class="card">
-    <h2>프로젝트</h2>
-    <div class="item">
-      <div class="when">2026.10</div>
-      <div>
-        <h3>GCP 환경 재구축 (vm-3 → vm-4)</h3>
-        <ul>
-          <li>결제 계정 종료로 접근 불가해진 환경을 Terraform 코드만으로 새 프로젝트에 재구축</li>
-          <li>GKE, Cloud SQL, Firebase, DNS, ArgoCD, Vault, Keycloak, Jenkins 복구</li>
-        </ul>
+  <section class="card" id="career">
+    <div class="section-kicker">Work Experience</div>
+    <h2>경력 요약</h2>
+    <div class="career-list">
+      <div class="career-row">
+        <div class="period">2024.09 – 현재</div>
+        <div><strong class="company">아이티센클로잇</strong></div>
+        <div class="team">플랫폼엔지니어링팀 · 클라우드 TA</div>
+        <div class="position">책임</div>
       </div>
-    </div>
-    <div class="item">
-      <div class="when">2026.10</div>
-      <div>
-        <h3>Jenkins CI/CD 이력서 페이지 (이 페이지)</h3>
-        <ul>
-          <li>GitHub push → Jenkins 파드 에이전트 → Maven 빌드·테스트 → Kaniko 이미지 → Artifact Registry → GKE 배포</li>
-          <li>Docker 데몬·서비스 계정 키 없이 Workload Identity로 레지스트리 push</li>
-        </ul>
+      <div class="career-row">
+        <div class="period">2021.09 – 2024.09</div>
+        <div><strong class="company">종이와연필</strong></div>
+        <div class="team">클라우드팀 · 클라우드 TA</div>
+        <div class="position">사원</div>
       </div>
     </div>
   </section>
 
-  <section class="card">
-    <h2>기술</h2>
-    <div class="skill"><b>Cloud</b><div class="tags"><span>GCP</span><span>GKE</span><span>Cloud SQL</span><span>Cloud DNS</span><span>Artifact Registry</span></div></div>
-    <div class="skill"><b>IaC</b><div class="tags"><span>Terraform</span><span>Helm</span></div></div>
-    <div class="skill"><b>CI/CD</b><div class="tags"><span>Jenkins</span><span>GitHub Actions</span><span>ArgoCD</span><span>Argo Rollouts</span><span>Kaniko</span></div></div>
-    <div class="skill"><b>Security</b><div class="tags"><span>Vault</span><span>Keycloak</span><span>cert-manager</span><span>Workload Identity</span></div></div>
-    <div class="skill"><b>Language</b><div class="tags"><span>Java / Spring Boot</span><span>Python</span><span>Bash</span></div></div>
+  <section class="card" id="projects">
+    <div class="section-kicker">Project Experience</div>
+    <h2>프로젝트 경력</h2>
+    <div class="group-title"><h3>아이티센클로잇</h3><span>2024.09 – 현재</span></div>
+    <div class="project-grid">
+      <div class="project">
+        <div class="project-head"><strong>사내 시스템 클라우드 마이그레이션</strong><span class="period">2024.09 – 2024.12</span></div>
+        <ul>
+          <li>GCP 프로젝트 아키텍처 설계</li>
+          <li>NHN Cloud에서 GCP로 데이터 및 OS 디스크 마이그레이션</li>
+          <li>VPC, VPN, 방화벽, Load Balancer 등 네트워크 인프라 구성</li>
+        </ul>
+        <div class="tags sm"><span>NHN Cloud → GCP</span><span>Network</span></div>
+      </div>
+      <div class="project">
+        <div class="project-head"><strong>신테카바이오 클라우드 마이그레이션</strong><span class="period">2025.02 – 2025.05</span></div>
+        <ul>
+          <li>EC2와 Docker Compose 기반 환경을 GKE 기반 Kubernetes 환경으로 전환</li>
+          <li>GCP 프로젝트 및 네트워크 아키텍처 구성</li>
+          <li>Argo CD 구축과 Blue-Green 배포 전략 적용</li>
+          <li>Dockerfile과 Helm Chart를 포함한 GitOps 환경 구성</li>
+          <li>VPC, VPN, 방화벽, Load Balancer 등 네트워크 인프라 구성</li>
+        </ul>
+        <div class="tags sm"><span>AWS → GCP</span><span>GKE</span><span>Argo CD</span></div>
+      </div>
+      <div class="project">
+        <div class="project-head"><strong>삼성전자 BDP 프로젝트 운영</strong><span class="period">2025.06 – 현재</span></div>
+        <ul>
+          <li>클라우드 환경 운영 및 기술 지원</li>
+          <li>서비스 관련 문의 대응과 운영 이슈 해결 지원</li>
+        </ul>
+        <div class="tags sm"><span>Cloud Operations</span><span>Technical Support</span></div>
+      </div>
+      <div class="project">
+        <div class="project-head"><strong>사내 플랫폼·업무 자동화</strong><span class="period">2024.09 – 현재</span></div>
+        <ul>
+          <li>GCP 프로젝트 자원 생성 프로세스를 Terraform 기반 IaC로 전환</li>
+          <li>GitOps 기반 운영 프로세스 설계</li>
+          <li>n8n을 활용한 업무 자동화 프로세스 구현 및 관리</li>
+          <li>Zammad 기반 이메일 문의 응대 시스템 구축</li>
+          <li>Backstage IDP 개발자 포털 도입 PoC 진행</li>
+        </ul>
+        <div class="tags sm"><span>Terraform</span><span>n8n</span><span>Backstage</span></div>
+      </div>
+      <div class="project">
+        <div class="project-head"><strong>손해보험협회 AI 챗봇 PoC·운영</strong><span class="period">2026.02 – 현재</span></div>
+        <ul>
+          <li>신규 AI 기능 도입을 위한 PoC 수행</li>
+          <li>정기 예방점검 및 서비스 운영 이슈 대응</li>
+          <li>프론트엔드·백엔드 기능 개발과 운영 배포 지원</li>
+          <li>AWS 기반 프로젝트 인프라 운영 및 관리</li>
+        </ul>
+        <div class="tags sm"><span>AWS</span><span>AI PoC</span><span>Service Operations</span></div>
+      </div>
+    </div>
+
+    <div class="group-title"><h3>종이와연필 · LG CNS Singlex</h3><span>2021.09 – 2024.09</span></div>
+    <div class="project-grid">
+      <div class="project">
+        <div class="project-head"><strong>상품기획 시스템 구축</strong><span class="period">2021.09 – 2021.12</span></div>
+        <ul>
+          <li>GCP 프로젝트 아키텍처 설계</li>
+          <li>Linux·Windows 보안 점검, 방화벽 및 네트워크 구성</li>
+          <li>GCP 환경의 VM Kernel Crash 오류 분석 및 해결</li>
+        </ul>
+      </div>
+      <div class="project">
+        <div class="project-head"><strong>고객경험관리 시스템 구축</strong><span class="period">2022.02 – 2022.03</span></div>
+        <ul>
+          <li>GCP 프로젝트 아키텍처 설계</li>
+          <li>Linux 보안 점검, 방화벽 및 네트워크 구성</li>
+        </ul>
+      </div>
+      <div class="project">
+        <div class="project-head"><strong>위기관리 시스템 구축</strong><span class="period">2022.04 – 2022.07</span></div>
+        <ul>
+          <li>GCP 프로젝트 아키텍처 설계</li>
+          <li>솔루션에 맞는 Windows 커스텀 배치 스크립트 작성</li>
+          <li>SVN에서 Git으로 형상관리 이관 및 Jenkins CI/CD 파이프라인 구축</li>
+          <li>Linux·Windows 보안 점검, 방화벽 및 네트워크 구성</li>
+          <li>정기 예방점검 업무 수행</li>
+        </ul>
+        <div class="tags sm"><span>SVN → Git</span><span>Jenkins</span><span>Windows Batch</span></div>
+      </div>
+      <div class="project">
+        <div class="project-head"><strong>공통 인프라 운영·개발 지원</strong><span class="period">2022.08 – 2024.09</span></div>
+        <ul>
+          <li>GCP 및 AWS 기반 공통 인프라 자원 운영과 기술 지원</li>
+          <li>Terraform, Shell Script, gcloud CLI를 이용한 자원 자동화 및 최적화</li>
+          <li>GKE와 Helm을 활용한 ELK 모니터링 환경 구축</li>
+          <li>솔루션 API를 활용한 자원 추가·조회·변경 프로세스 단순화</li>
+          <li>GKE·EKS에서 Helm, Jenkinsfile, Git 기반 Jenkins CI/CD 구축</li>
+          <li>Google Workspace API 기반 계정 생성 자동화 스크립트 개발</li>
+        </ul>
+        <div class="tags sm"><span>GKE / EKS</span><span>Terraform</span><span>ELK</span><span>API</span></div>
+      </div>
+    </div>
   </section>
 
-  <section class="card">
-    <h2>학력 · 자격 (예시)</h2>
-    <div class="item"><div class="when">2022.02</div><div><h3>예시대학교 컴퓨터공학과 졸업</h3></div></div>
-    <div class="item"><div class="when">2025</div><div><h3>Google Cloud Associate Cloud Engineer (예시)</h3></div></div>
+  <section class="card" id="skills">
+    <div class="section-kicker">Technical Skills</div>
+    <h2>기술 역량</h2>
+    <div class="skill"><b>Cloud</b><div class="tags"><span>GCP</span><span>AWS</span><span>GKE</span><span>EKS</span><span>VPC / VPN</span><span>Load Balancing</span></div></div>
+    <div class="skill"><b>Container</b><div class="tags"><span>Kubernetes</span><span>Docker</span><span>Helm</span><span>Docker Compose</span></div></div>
+    <div class="skill"><b>CI/CD · GitOps</b><div class="tags"><span>Jenkins</span><span>GitHub Actions</span><span>Argo CD</span><span>Blue-Green</span><span>Git</span></div></div>
+    <div class="skill"><b>IaC · Automation</b><div class="tags"><span>Terraform</span><span>Python</span><span>Bash</span><span>gcloud CLI</span><span>n8n</span></div></div>
+    <div class="skill"><b>Platform · Ops</b><div class="tags"><span>Backstage</span><span>Zammad</span><span>ELK</span><span>Linux</span><span>Windows</span></div></div>
   </section>
 
-  <footer>Jenkins로 자동 배포됨 · {{APP_ENV}} · Build <code>{{BUILD_INFO}}</code> · <a href="/actuator/health">health</a></footer>
+  <section class="card" id="education">
+    <div class="section-kicker">Education</div>
+    <h2>학력</h2>
+    <div class="career-list">
+      <div class="career-row">
+        <div class="period">2016.03 – 2022.02</div>
+        <div><strong>대전대학교</strong></div>
+        <div class="team">컴퓨터공학과 졸업 · 4.03 / 4.5</div>
+        <div class="position">학사</div>
+      </div>
+      <div class="career-row">
+        <div class="period">2013.03 – 2016.02</div>
+        <div><strong>강원고등학교</strong></div>
+        <div class="team">졸업</div>
+        <div class="position"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="certifications">
+    <div class="section-kicker">Certifications</div>
+    <h2>자격</h2>
+    <div class="credentials">
+      <div class="credential"><strong>AI Developer Professional</strong><span>AWS · 2026.09</span></div>
+      <div class="credential"><strong>Professional Cloud DevOps Engineer</strong><span>Google Cloud · 2025.12</span></div>
+      <div class="credential"><strong>Professional Cloud Architect</strong><span>Google Cloud · 2025.08</span></div>
+      <div class="credential"><strong>Certified Kubernetes Administrator</strong><span>Linux Foundation · 2024.01</span></div>
+      <div class="credential"><strong>중등학교 정교사 2급 · 컴퓨터</strong><span>2022.02</span></div>
+    </div>
+  </section>
+
+  <section class="card" id="military">
+    <div class="section-kicker">Military Service</div>
+    <h2>병역 사항</h2>
+    <div class="military">
+      <strong>군필</strong>
+      <div><span class="company">사회복무요원 소집해제</span><div class="subtitle">2018.03 – 2020.01</div></div>
+    </div>
+  </section>
+
+  <footer>Jenkins 자동 배포 · {{APP_ENV}} · Build <code>{{BUILD_INFO}}</code> · <a href="/actuator/health">health</a></footer>
 </main>
 </body>
 </html>

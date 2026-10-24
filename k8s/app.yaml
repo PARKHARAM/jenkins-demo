@@ -25,6 +25,8 @@ spec:
           value: "${BUILD_INFO}"
         - name: APP_ENV
           value: "${APP_ENV}"
+        - name: IMAGE                # 페이지의 Deployment 카드에 이미지 태그 표시
+          value: "${IMAGE}"
         readinessProbe:
           httpGet: { path: /actuator/health, port: 8080 }
           initialDelaySeconds: 10

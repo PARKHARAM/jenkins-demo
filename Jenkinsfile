@@ -41,8 +41,8 @@ spec:
     image: maven:3.9-eclipse-temurin-21
     command: ["sleep"]
     args: ["infinity"]
-    resources:
-      requests: { cpu: 500m, memory: 1Gi }
+    resources:            # 단계가 순서대로 돌므로 예약(requests)은 작게, 실제 사용은 limits 까지. 노드 1대에서 dev 배포 파드 자리 확보
+      requests: { cpu: 250m, memory: 1Gi }
       limits:   { cpu: "2",  memory: 2Gi }
     volumeMounts:
     - name: m2
@@ -52,14 +52,14 @@ spec:
     command: ["sleep"]
     args: ["infinity"]
     resources:
-      requests: { cpu: 500m, memory: 1Gi }
+      requests: { cpu: 250m, memory: 1Gi }
       limits:   { cpu: "2",  memory: 2Gi }
   - name: trivy             # 이미지 취약점 스캔 (보안 게이트). 버전은 trivy-db-update CronJob 과 맞춤
     image: aquasec/trivy:0.58.1
     command: ["sleep"]
     args: ["infinity"]
     resources:
-      requests: { cpu: 200m, memory: 512Mi }
+      requests: { cpu: 100m, memory: 512Mi }
       limits:   { cpu: "1",  memory: 1Gi }
     volumeMounts:
     - name: trivy-db

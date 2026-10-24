@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="박하람의 Jenkins 기반 CI/CD 구성과 배포 정보">
+<title>박하람 · CI/CD 구성</title>
+<style>
+  :root { --ink:#172033; --muted:#657086; --line:#dfe5ee; --accent:#2457d6; --accent-soft:#edf3ff; --bg:#f4f7fb; --card:#fff; --ok:#1f8a5b; --ok-soft:#e9f7f0; --warn-soft:#fff6e8; --warn-line:#f0c88f; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.7 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif; word-break:keep-all; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9em; }
+  main { max-width:960px; margin:44px auto; padding:0 20px; }
+  .env-dev { background:#e8f0ff; border:1px solid #9db8f2; color:#1d3f9a; border-radius:10px; padding:9px 14px; font-size:.88rem; margin-bottom:14px; font-weight:650; }
+  .primary-nav { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+  .primary-nav a { padding:12px 16px; background:#fff; border:1px solid var(--line); border-radius:12px; color:#455168; text-align:center; font-size:.92rem; font-weight:750; }
+  .primary-nav a:hover { border-color:#aac0ef; color:var(--accent); text-decoration:none; }
+  .primary-nav a.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:34px 38px; margin-bottom:20px; box-shadow:0 12px 34px rgba(32,49,78,.055); }
+  .hero { padding:44px; background:linear-gradient(135deg,#fff 55%,#edf3ff); }
+  .eyebrow { color:var(--accent); font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+  h1 { margin:7px 0 12px; font-size:2.25rem; line-height:1.3; letter-spacing:-.04em; }
+  h2 { font-size:1.2rem; margin:0 0 20px; padding-bottom:10px; border-bottom:2px solid var(--ink); }
+  .summary { margin:0; color:#35415a; font-size:1.02rem; }
+  .tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+  .tags span { background:var(--accent-soft); color:#24448f; border:1px solid #dbe6fb; border-radius:999px; padding:3px 11px; font-size:.84rem; }
+  .flow { display:flex; flex-wrap:wrap; align-items:center; gap:8px 5px; }
+  .flow span { background:#fff; border:1px solid var(--line); border-radius:9px; padding:7px 12px; font-size:.86rem; font-weight:700; }
+  .flow span.gate { background:var(--warn-soft); border-color:var(--warn-line); }
+  .flow span.env { background:var(--ok-soft); border-color:#a9dcc3; color:var(--ok); }
+  .flow i { color:var(--muted); font-style:normal; }
+  .links { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .links a { border:1px solid var(--line); border-radius:11px; padding:12px 14px; background:#f8faff; text-align:center; font-size:.9rem; font-weight:700; }
+  .links a:hover { border-color:#aac0ef; text-decoration:none; }
+  .deploy { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .deploy div { border:1px solid var(--line); border-radius:12px; padding:13px 16px; }
+  .deploy span { display:block; color:var(--muted); font-size:.8rem; }
+  .deploy strong { display:block; font-size:.98rem; overflow-wrap:anywhere; }
+  .badge { display:inline-block; border-radius:999px; padding:1px 10px; font-size:.86rem; }
+  .badge.dev { background:var(--accent-soft); color:#1d3f9a; }
+  .badge.prod { background:var(--ok-soft); color:var(--ok); }
+  .badge.local { background:#eef0f4; color:var(--muted); }
+  .note { color:var(--muted); font-size:.86rem; margin:15px 0 0; }
+  footer { color:var(--muted); font-size:.82rem; text-align:center; margin:24px 0 40px; }
+  footer code { background:#e7ecf3; padding:2px 6px; border-radius:6px; }
+  @media (max-width:680px) { main { margin:20px auto; padding:0 12px; } .card,.hero { padding:26px 22px; border-radius:14px; } h1 { font-size:1.9rem; } .links,.deploy { grid-template-columns:1fr; } }
+  @media print { body { background:#fff; font-size:13px; } main { max-width:none; margin:0; padding:0; } .card { box-shadow:none; } .env-dev,.primary-nav,footer { display:none; } }
+</style>
+</head>
+<body>
+<main>
+  {{ENV_BANNER}}
+  <nav class="primary-nav" aria-label="주요 페이지">
+    <a href="/">이력서</a>
+    <a href="/cover-letter">자기소개서</a>
+    <a class="active" href="/cicd" aria-current="page">CI/CD 구성</a>
+  </nav>
+
+  <header class="card hero">
+    <div class="eyebrow">Personal Project · 2026.10</div>
+    <h1>Jenkins CI/CD 이력서 웹 애플리케이션</h1>
+    <p class="summary">Java와 Spring Boot로 개발한 이력서 웹 애플리케이션입니다. GKE 위의 Jenkins가 빌드·검사·배포하며, develop은 개발계로 자동 배포되고 main은 PR 검증과 관리자 승인을 거쳐 운영계에 반영됩니다.</p>
+    <div class="tags"><span>Java 21</span><span>Spring Boot</span><span>Jenkins</span><span>GKE</span><span>Kaniko</span><span>Trivy</span><span>Terraform</span><span>Workload Identity</span></div>
+  </header>
+
+  <section class="card">
+    <h2>배포 파이프라인</h2>
+    <div class="flow">
+      <span>Git Push</span><i>→</i><span>Maven Test</span><i>→</i><span>Kaniko 이미지</span><i>→</i><span class="gate">Trivy 검사</span><i>→</i><span class="env">개발계</span><i>→</i><span>PR 검증</span><i>→</i><span class="gate">관리자 승인</span><i>→</i><span class="env">운영계</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>접속 및 검증</h2>
+    <div class="links">
+      <a href="https://github.com/PARKHARAM/jenkins-demo" target="_blank" rel="noopener">소스 저장소 ↗</a>
+      <a href="https://jenkins.hrc0618.shop/job/jenkins-demo/" target="_blank" rel="noopener">Jenkins 파이프라인 ↗</a>
+      <a href="https://dev.hrc0618.shop" target="_blank" rel="noopener">개발계 ↗</a>
+      <a href="https://demo.hrc0618.shop" target="_blank" rel="noopener">운영계 ↗</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>현재 Deployment</h2>
+    <div class="deploy">
+      <div><span>환경</span><strong>{{ENV_BADGE}}</strong></div>
+      <div><span>Jenkins 빌드</span><strong>{{BUILD_NO}}</strong></div>
+      <div><span>커밋</span><strong>{{COMMIT}}</strong></div>
+      <div><span>이미지 태그</span><strong><code>{{IMAGE_TAG}}</code></strong></div>
+      <div><span>기동 시각</span><strong>{{STARTED_AT}}</strong></div>
+      <div><span>보안 게이트</span><strong>Trivy 통과</strong></div>
+    </div>
+    <p class="note">수정 가능한 HIGH/CRITICAL 취약점이 있으면 배포 전에 파이프라인이 중단됩니다. 운영계는 개발계에서 검증한 동일 이미지를 관리자 승인 후 그대로 배포합니다.</p>
+  </section>
+
+  <footer>Jenkins 자동 배포 · {{APP_ENV}} · Build <code>{{BUILD_INFO}}</code> · <a href="/actuator/health">health</a></footer>
+</main>
+</body>
+</html>
